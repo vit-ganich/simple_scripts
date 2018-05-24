@@ -1,0 +1,53 @@
+Sub test()
+
+Dim ToAddress
+Dim FromAddress
+Dim MessageSubject
+Dim MyTime
+Dim MessageBody
+Dim MessageAttachment
+Dim ol, ns, newMail
+Dim realAttachment
+MyTime = Now
+
+
+Dim x
+'~~> Number of mails
+For x = 1 To 499
+
+'~~> Path to attachments folder
+StrPath = "C:\123\"
+StrFile = Dir(StrPath & "*.*")
+
+'~~> Address to
+ToAddress = "test1@fg2.a"
+
+'~~> Mail subject
+MessageSubject = x & "_test message Outlook 2007" & MyTime
+
+'~~> Mail body
+MessageBody = "Test message body" & vbCrLf & "Produced at " & MyTime
+
+
+Set ns = Outlook.GetNamespace("MAPI")
+Set newMail = Outlook.CreateItem(olMailItem)
+newMail.Subject = MessageSubject
+newMail.Body = MessageBody
+newMail.Recipients.Add (ToAddress)
+Dim myAttachments As Outlook.Attachments
+Set myAttachments = newMail.Attachments
+
+'~~> *.* loop for all files in selected folder
+Do While Len(StrFile) > 0
+    newMail.Attachments.Add StrPath & StrFile
+    StrFile = Dir
+Loop
+        
+newMail.Send
+
+Next
+
+'~~> Message after successfull operation
+MsgBox x & " Mails have been sent", vbOKOnly
+
+End Sub
